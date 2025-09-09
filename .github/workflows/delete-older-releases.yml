@@ -1,24 +1,20 @@
 name: delete-older-releases
+
 on:
   workflow_dispatch:
-#  schedule:
-#    - cron: 0 16 * * *
-    
+
+permissions: write-all
+
 jobs:
-  del_runs:
-    runs-on: ubuntu-20.04
+  auto_clean:
+    runs-on: ubuntu-latest
     steps:
-    
-    - name: 删除工作流
-      uses: GitRML/delete-workflow-runs@main
-      with:
-        retain_days: 5
-        keep_minimum_runs: 0
-    
-    - name: 删除旧的Releases
-      uses: dev-drprasad/delete-older-releases@v0.2.0
-      with:
-        keep_latest: 5
-        delete_tags: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Delete old Releases and Workflows
+        uses: ophub/delete-releases-workflows@main
+        with:
+          gh_token: ${{secrets.GITHUB_TOKEN}}
+          delete_releases: true
+          releases_keep_latest: 0
+          delete_tags: true
+          delete_workflows: true
+          workflows_keep_day: 0
